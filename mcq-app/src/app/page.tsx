@@ -142,14 +142,31 @@ export default function Home() {
                         </label>
                       ))}
                     </div>
+                    {quizState.isSubmitted && (
+                      <div className="mt-4 p-4 rounded-xl bg-gray-50 text-gray-800 font-semibold text-lg">
+                        <span className="font-bold text-blue-700">Your Selection:</span> {
+                          question.selectedAnswer
+                            ? <>{question.selectedAnswer}{question.selectedAnswer === question.correctAnswer ? <span className="font-extrabold text-green-700"> is right</span> : <span className="font-extrabold text-red-700"> is wrong</span>}</>
+                            : <span className="italic text-gray-500">unanswered</span>
+                        }
+                      </div>
+                    )}
                     {isWrong && (
                       <div className="mt-4 p-4 rounded-xl bg-red-100 text-red-800 font-semibold text-lg">
-                        Correct Answer: <span className="bg-green-200 text-green-900 px-2 py-1 rounded">{question.correctAnswer}</span>
+                        <div>
+                          Correct Answer: <span className="bg-green-200 text-green-900 px-2 py-1 rounded">{question.correctAnswer}</span>
+                        </div>
+                        {question.explanation && (
+                          <div className="mt-2 p-3 rounded bg-white text-gray-800 text-base font-normal border border-red-200">
+                            <span className="font-bold text-red-700">Explanation:</span> {question.explanation}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
                 );
               })}
+              <div className="h-8 sm:h-12" />
               {!quizState.isSubmitted ? (
                 <button
                   onClick={handleSubmit}
