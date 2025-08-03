@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-  const { numQuestions, topic } = await request.json();
+  const { numQuestions, topic, customPrompt } = await request.json();
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: 'Missing Google Gemini API key' }, { status: 500 });
   }
 
-  const prompt = `Generate ${numQuestions} multiple choice questions on the topic "${topic}". Each question should have 4 options and specify the correct answer. Return the result as a JSON array with fields: id, question, options, correctAnswer.`;
+  // If customPrompt is provided, use it, otherwise build the default prompt
+  const prompt = customPrompt && customPrompt.trim().length > 0
+    ? customPrompt.trim() + ". Return the result as a JSON array with fields: id, question, options, correctAnswer."
+    : `Generate ${numQuestions} multiple choice questions on the topic "${topic}". Each question should have 4 options and specify the correct answer. Return the result as a JSON array with fields: id, question, options, correctAnswer.`;
 
   // Gemini API endpoint and payload (matching working curl)
   const geminiPayload = {
