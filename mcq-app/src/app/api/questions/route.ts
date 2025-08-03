@@ -9,8 +9,8 @@ export async function POST(request: Request) {
 
   // If customPrompt is provided, use it, otherwise build the default prompt
   const prompt = customPrompt && customPrompt.trim().length > 0
-    ? customPrompt.trim() + ". Return the result as a JSON array with fields: id, question, options, correctAnswer."
-    : `Generate ${numQuestions} multiple choice questions on the topic "${topic}". Each question should have 4 options and specify the correct answer. Return the result as a JSON array with fields: id, question, options, correctAnswer.`;
+    ? customPrompt.trim() + ". Return the result as a JSON array with fields: id, question, options, correctAnswer, explanation."
+    : `Generate ${numQuestions} multiple choice questions on the topic "${topic}". Each question should have 4 options and specify the correct answer. Return the result as a JSON array with fields: id, question, options, correctAnswer, explanation.`;
 
   // Gemini API endpoint and payload (matching working curl)
   const geminiPayload = {
