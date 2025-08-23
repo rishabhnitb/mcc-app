@@ -98,6 +98,27 @@ export default function Home() {
         ) : (
           <>
             <h1 className="text-3xl sm:text-4xl font-extrabold mb-8 text-center text-blue-800 font-sans drop-shadow-lg tracking-tight">MCQ Quiz</h1>
+            {quizState.isSubmitted && (
+              <div className="text-center space-y-4 mb-8">
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-2xl inline-block shadow-lg border border-indigo-200/50 backdrop-blur-sm">
+                  Your Score: <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">{quizState.currentScore}</span> / {quizState.questions.length}
+                </div>
+                <div className="flex justify-center gap-4 mt-4">
+                  <button
+                    onClick={handleTryAgain}
+                    className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-3 rounded-xl font-bold text-lg sm:text-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-emerald-600 hover:to-green-600"
+                  >
+                    Try Again
+                  </button>
+                  <button
+                    onClick={handleStartOver}
+                    className="bg-gradient-to-r from-gray-400 to-slate-500 text-white px-6 py-3 rounded-xl font-bold text-lg sm:text-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-gray-500 hover:to-slate-600"
+                  >
+                    Start Over
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="space-y-8 sm:space-y-10">
               {quizState.questions.map((question: QuestionState, idx: number) => {
                 const isCorrect = quizState.isSubmitted && question.selectedAnswer === question.correctAnswer;
@@ -167,31 +188,13 @@ export default function Home() {
                 );
               })}
               <div className="h-8 sm:h-12" />
-              {!quizState.isSubmitted ? (
+              {!quizState.isSubmitted && (
                 <button
                   onClick={handleSubmit}
                   className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-4 rounded-xl font-bold text-xl sm:text-2xl mt-8 shadow-[0_10px_30px_rgba(99,_102,_241,_0.5)] hover:shadow-[0_20px_40px_rgba(99,_102,_241,_0.6)] transition-all duration-300 transform hover:scale-[1.02] hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700"
                 >
                   Submit Answers
                 </button>
-              ) : (
-                <div className="text-center space-y-6 mt-8">
-                  <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-2xl inline-block shadow-lg border border-indigo-200/50 backdrop-blur-sm">
-                    Your Score: <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">{quizState.currentScore}</span> / {quizState.questions.length}
-                  </div>
-                  <button
-                    onClick={handleTryAgain}
-                    className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-3 rounded-xl font-bold text-lg sm:text-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-emerald-600 hover:to-green-600"
-                  >
-                    Try Again
-                  </button>
-                  <button
-                    onClick={handleStartOver}
-                    className="bg-gradient-to-r from-gray-400 to-slate-500 text-white px-6 py-3 rounded-xl font-bold text-lg sm:text-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-gray-500 hover:to-slate-600 ml-4"
-                  >
-                    Start Over
-                  </button>
-                </div>
               )}
             </div>
           </>
