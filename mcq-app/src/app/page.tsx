@@ -90,7 +90,7 @@ export default function Home() {
         {/* Always show the form if quizState is null */}
         {quizState === null ? (
           <>
-            <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 font-sans tracking-tight animate-fade-in">MCQ Quiz</h1>
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 font-sans tracking-tight animate-fade-in">MCQ Quiz</h1>
             <QuestionForm onSubmit={fetchQuestions} />
             {loading && <div className="text-center text-blue-700 font-bold mb-4 animate-pulse text-lg sm:text-xl">Loading questions...</div>}
             {error && <div className="text-center text-red-600 font-bold mb-4 text-lg sm:text-xl">{error}</div>}
@@ -111,8 +111,8 @@ export default function Home() {
                     `}
                   >
                     <div className="flex items-center mb-4">
-                      <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text mr-2">Q{idx + 1}.</span>
-                      <h2 className="text-lg sm:text-2xl font-bold text-gray-800 font-sans leading-snug">{question.question}</h2>
+                      <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text mr-2">Q{idx + 1}.</span>
+                      <h2 className="text-base sm:text-lg font-bold text-gray-800 font-sans leading-snug">{question.question}</h2>
                     </div>
                     <div className="flex flex-col gap-4 mt-2 border border-indigo-200 rounded-xl p-4 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 backdrop-blur-sm">
                       {question.options.map((option: string, optIdx: number) => (
@@ -126,7 +126,7 @@ export default function Home() {
                             disabled={quizState.isSubmitted}
                             className="accent-blue-600 w-6 h-6"
                           />
-                          <span className={`px-5 py-4 rounded-xl font-semibold font-sans text-lg sm:text-xl transition-all duration-300 shadow-lg text-left hover:shadow-xl
+                          <span className={`px-4 py-3 rounded-xl font-medium font-sans text-base sm:text-lg transition-all duration-300 shadow-md text-left hover:shadow-lg
                             ${question.selectedAnswer === option
                               ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white scale-[1.02]'
                               : quizState.isSubmitted
@@ -170,27 +170,24 @@ export default function Home() {
               {!quizState.isSubmitted ? (
                 <button
                   onClick={handleSubmit}
-                  className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-6 rounded-xl font-bold text-3xl mt-8 shadow-[0_10px_30px_rgba(99,_102,_241,_0.5)] hover:shadow-[0_20px_40px_rgba(99,_102,_241,_0.6)] transition-all duration-300 transform hover:scale-[1.02] hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700"
-                  style={{ fontSize: '2rem' }}
+                  className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-4 rounded-xl font-bold text-xl sm:text-2xl mt-8 shadow-[0_10px_30px_rgba(99,_102,_241,_0.5)] hover:shadow-[0_20px_40px_rgba(99,_102,_241,_0.6)] transition-all duration-300 transform hover:scale-[1.02] hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700"
                 >
                   Submit Answers
                 </button>
               ) : (
                 <div className="text-center space-y-6 mt-8">
-                  <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-2xl inline-block shadow-lg border border-indigo-200/50 backdrop-blur-sm" style={{ fontSize: '1.75rem' }}>
+                  <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-2xl inline-block shadow-lg border border-indigo-200/50 backdrop-blur-sm">
                     Your Score: <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">{quizState.currentScore}</span> / {quizState.questions.length}
                   </div>
                   <button
                     onClick={handleTryAgain}
-                    className="bg-gradient-to-r from-emerald-500 to-green-500 text-white p-5 rounded-xl font-bold text-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-emerald-600 hover:to-green-600"
-                    style={{ fontSize: '1.75rem' }}
+                    className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-3 rounded-xl font-bold text-lg sm:text-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-emerald-600 hover:to-green-600"
                   >
                     Try Again
                   </button>
                   <button
                     onClick={handleStartOver}
-                    className="bg-gradient-to-r from-gray-400 to-slate-500 text-white p-5 rounded-xl font-bold text-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-gray-500 hover:to-slate-600 ml-4"
-                    style={{ fontSize: '1.75rem' }}
+                    className="bg-gradient-to-r from-gray-400 to-slate-500 text-white px-6 py-3 rounded-xl font-bold text-lg sm:text-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-gray-500 hover:to-slate-600 ml-4"
                   >
                     Start Over
                   </button>
