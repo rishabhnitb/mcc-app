@@ -85,12 +85,12 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-100 via-white to-purple-100 min-h-screen flex flex-col items-center justify-center py-6 px-2">
-      <main className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 w-full max-w-2xl mx-auto border border-gray-200">
+    <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 min-h-screen flex flex-col items-center justify-center py-6 px-2 backdrop-blur-lg">
+      <main className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] p-4 sm:p-8 w-full max-w-2xl mx-auto border border-indigo-100 hover:shadow-[0_20px_60px_rgba(8,_112,_184,_0.8)] transition-all duration-300">
         {/* Always show the form if quizState is null */}
         {quizState === null ? (
           <>
-            <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 text-center text-blue-800 font-sans drop-shadow-lg tracking-tight">MCQ Quiz</h1>
+            <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 font-sans tracking-tight animate-fade-in">MCQ Quiz</h1>
             <QuestionForm onSubmit={fetchQuestions} />
             {loading && <div className="text-center text-blue-700 font-bold mb-4 animate-pulse text-lg sm:text-xl">Loading questions...</div>}
             {error && <div className="text-center text-red-600 font-bold mb-4 text-lg sm:text-xl">{error}</div>}
@@ -105,16 +105,16 @@ export default function Home() {
                 return (
                   <div
                     key={question.id}
-                    className={`p-6 sm:p-8 rounded-2xl shadow-xl border-2 border-blue-300 mb-8 max-w-xl mx-auto flex flex-col
-                      ${isCorrect ? 'bg-green-100' : ''}
-                      ${isWrong ? 'bg-red-100' : 'bg-white'}
+                    className={`p-6 sm:p-8 rounded-2xl shadow-xl border border-opacity-50 mb-8 max-w-xl mx-auto flex flex-col transform transition-all duration-300 hover:scale-[1.02]
+                      ${isCorrect ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : ''}
+                      ${isWrong ? 'bg-gradient-to-r from-red-50 to-rose-50 border-red-200' : 'bg-white/90 backdrop-blur-sm border-indigo-200'}
                     `}
                   >
                     <div className="flex items-center mb-4">
-                      <span className="text-lg sm:text-xl font-bold text-blue-700 mr-2">Q{idx + 1}.</span>
-                      <h2 className="text-lg sm:text-2xl font-bold text-gray-900 font-sans leading-snug drop-shadow-md">{question.question}</h2>
+                      <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text mr-2">Q{idx + 1}.</span>
+                      <h2 className="text-lg sm:text-2xl font-bold text-gray-800 font-sans leading-snug">{question.question}</h2>
                     </div>
-                    <div className="flex flex-col gap-4 mt-2 border border-blue-200 rounded-xl p-2 bg-blue-50">
+                    <div className="flex flex-col gap-4 mt-2 border border-indigo-200 rounded-xl p-4 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 backdrop-blur-sm">
                       {question.options.map((option: string, optIdx: number) => (
                         <label key={option} className="flex items-center cursor-pointer w-full gap-4">
                           <input
@@ -126,16 +126,16 @@ export default function Home() {
                             disabled={quizState.isSubmitted}
                             className="accent-blue-600 w-6 h-6"
                           />
-                          <span className={`px-5 py-4 rounded-xl font-semibold font-sans text-lg sm:text-2xl transition-colors duration-150 shadow-md text-left
+                          <span className={`px-5 py-4 rounded-xl font-semibold font-sans text-lg sm:text-xl transition-all duration-300 shadow-lg text-left hover:shadow-xl
                             ${question.selectedAnswer === option
-                              ? 'bg-blue-600 text-white scale-105'
+                              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white scale-[1.02]'
                               : quizState.isSubmitted
                               ? option === question.correctAnswer
-                                ? 'bg-green-500 text-white scale-105'
+                                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white scale-[1.02]'
                                 : question.selectedAnswer === option
-                                ? 'bg-red-500 text-white scale-105'
-                                : 'bg-blue-50 text-gray-700'
-                              : 'bg-white text-blue-700 hover:bg-blue-100'}
+                                ? 'bg-gradient-to-r from-red-500 to-rose-500 text-white scale-[1.02]'
+                                : 'bg-white/80 text-gray-700 backdrop-blur-sm'
+                              : 'bg-white/90 text-indigo-700 hover:bg-indigo-50 backdrop-blur-sm'}
                           `}>
                             {option}
                           </span>
@@ -170,27 +170,27 @@ export default function Home() {
               {!quizState.isSubmitted ? (
                 <button
                   onClick={handleSubmit}
-                  className="w-full bg-gradient-to-r from-blue-700 to-purple-700 text-white p-6 rounded-xl font-bold text-3xl mt-8 shadow-lg hover:from-blue-800 hover:to-purple-800 transition-colors"
-                  style={{ backgroundColor: '#4f46e5', fontSize: '2rem' }}
+                  className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-6 rounded-xl font-bold text-3xl mt-8 shadow-[0_10px_30px_rgba(99,_102,_241,_0.5)] hover:shadow-[0_20px_40px_rgba(99,_102,_241,_0.6)] transition-all duration-300 transform hover:scale-[1.02] hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700"
+                  style={{ fontSize: '2rem' }}
                 >
                   Submit Answers
                 </button>
               ) : (
                 <div className="text-center space-y-6 mt-8">
-                  <div className="text-2xl sm:text-4xl font-bold text-purple-700 drop-shadow-lg bg-blue-100 p-5 rounded-xl inline-block" style={{ fontSize: '1.75rem' }}>
-                    Your Score: <span className="text-blue-700">{quizState.currentScore}</span> / {quizState.questions.length}
+                  <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-2xl inline-block shadow-lg border border-indigo-200/50 backdrop-blur-sm" style={{ fontSize: '1.75rem' }}>
+                    Your Score: <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">{quizState.currentScore}</span> / {quizState.questions.length}
                   </div>
                   <button
                     onClick={handleTryAgain}
-                    className="bg-green-600 text-white p-5 rounded-xl font-bold text-2xl shadow hover:bg-green-700 transition-colors"
-                    style={{ backgroundColor: '#22c55e', fontSize: '1.75rem' }}
+                    className="bg-gradient-to-r from-emerald-500 to-green-500 text-white p-5 rounded-xl font-bold text-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-emerald-600 hover:to-green-600"
+                    style={{ fontSize: '1.75rem' }}
                   >
                     Try Again
                   </button>
                   <button
                     onClick={handleStartOver}
-                    className="bg-gray-400 text-white p-5 rounded-xl font-bold text-2xl shadow hover:bg-gray-500 transition-colors ml-4"
-                    style={{ backgroundColor: '#6b7280', fontSize: '1.75rem' }}
+                    className="bg-gradient-to-r from-gray-400 to-slate-500 text-white p-5 rounded-xl font-bold text-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:from-gray-500 hover:to-slate-600 ml-4"
+                    style={{ fontSize: '1.75rem' }}
                   >
                     Start Over
                   </button>
