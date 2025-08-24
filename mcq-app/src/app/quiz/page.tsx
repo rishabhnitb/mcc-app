@@ -53,34 +53,36 @@ export default function Quiz() {
   };
 
   const handleSubmit = async () => {
-    if (!quizState) return;
+  if (!quizState) return;
 
-    const score = quizState.questions.reduce(
-      (acc, q) => (q.selectedAnswer === q.correctAnswer ? acc + 1 : acc),
-      0
-    );
+  const score = quizState.questions.reduce(
+    (acc, q) => (q.selectedAnswer === q.correctAnswer ? acc + 1 : acc),
+    0
+  );
 
-    try {
-      await fetch('/api/quiz/attempts', {
+  try {
+    await fetch('/api/quiz/attempts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          topic: quizState.topic,
-          score,
-          totalQuestions: quizState.questions.length
+            topic: quizState.topic,
+            score,
+            totalQuestions: quizState.questions.length,
+            username: user?.username || user?.email,
         }),
-      });
+        credentials: "include", // 👈 important: send cookies/session
+    });
 
-      setQuizState(prev => prev ? {
-        ...prev,
-        currentScore: score,
-        isSubmitted: true,
-      } : null);
-    } catch (error) {
-      console.error('Error saving quiz attempt:', error);
-      setError('Failed to save quiz results. Please try again.');
-    }
-  };
+    setQuizState(prev => prev ? {
+      ...prev,
+      currentScore: score,
+      isSubmitted: true,
+    } : null);
+  } catch (error) {
+    console.error('Error saving quiz attempt:', error);
+    setError('Failed to save quiz results. Please try again.');
+  }
+ };
 
   const handleTryAgain = () => {
     setQuizState(prev => prev ? {

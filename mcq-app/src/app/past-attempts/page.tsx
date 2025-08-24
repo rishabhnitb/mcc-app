@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface QuizAttempt {
   _id: string;
@@ -21,14 +22,15 @@ export default function PastAttempts() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/');
+      // Don't redirect, just show message
+      console.log("No user found, staying on page");
     }
-  }, [loading, user, router]);
+  }, [loading, user]);
 
   useEffect(() => {
     const fetchAttempts = async () => {
       try {
-        const res = await fetch('/api/quiz/attempts', {
+        const res = await fetch(`/api/quiz/attempts?username=${encodeURIComponent(user?.username ?? '')}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -53,12 +55,29 @@ export default function PastAttempts() {
     }
   }, [user]);
 
-  if (loading || !user) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div className="text-center text-red-600">You must be logged in to view past attempts.</div>;
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
+      <header className="max-w-4xl mx-auto mb-8">
+        <div className="flex items-center justify-between py-4 px-6 bg-white/80 rounded-2xl shadow">
+          <Link href="/quiz" className="text-2xl font-bold text-indigo-700 hover:text-indigo-900 transition-colors">
+            MCQ Quiz
+          </Link>
+          <Link
+            href="/"
+            className="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition-colors"
+          >
+            Home
+          </Link>
+        </div>
+      </header>
       <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl p-6 sm:p-8">
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Past Quiz Attempts</h2>
 

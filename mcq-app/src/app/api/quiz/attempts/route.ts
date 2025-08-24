@@ -1,28 +1,15 @@
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db/mongodb';
 import QuizAttempt from '@/lib/db/models/quizAttempt';
-import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 export async function POST(req: NextRequest) {
   try {
-    const auth = req.headers.get('authorization');
-    if (!auth || !auth.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ message: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    const token = auth.split(' ')[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-    const { topic, score, totalQuestions } = await req.json();
+    const { username, topic, score, totalQuestions } = await req.json();
 
     await dbConnect();
 
     const attempt = new QuizAttempt({
-      userId: decoded.userId,
+      username,
       topic,
       score,
       totalQuestions,
@@ -36,13 +23,6 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
-    if (error.name === 'JsonWebTokenError') {
-      return new Response(JSON.stringify({ message: 'Invalid token' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
     console.error('Save attempt error:', error);
     return new Response(JSON.stringify({ message: 'Error saving attempt' }), {
       status: 500,
@@ -53,20 +33,18 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const auth = req.headers.get('authorization');
-    if (!auth || !auth.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ message: 'Unauthorized' }), {
-        status: 401,
+    const { searchParams } = new URL(req.url);
+    const username = searchParams.get('username');
+    if (!username) {
+      return new Response(JSON.stringify({ message: 'Username query parameter is required' }), {
+        status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    const token = auth.split(' ')[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-
     await dbConnect();
 
-    const attempts = await QuizAttempt.find({ userId: decoded.userId })
+    const attempts = await QuizAttempt.find({ username })
       .sort({ date: -1 })
       .limit(50); // Limit to last 50 attempts
 
@@ -75,13 +53,6 @@ export async function GET(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
-    if (error.name === 'JsonWebTokenError') {
-      return new Response(JSON.stringify({ message: 'Invalid token' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
     console.error('Fetch attempts error:', error);
     return new Response(JSON.stringify({ message: 'Error fetching attempts' }), {
       status: 500,

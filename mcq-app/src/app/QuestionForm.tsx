@@ -18,7 +18,11 @@ export default function QuestionForm({ onSubmit }: Props) {
       className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 mb-10 flex flex-col gap-8 border border-gray-200 animate-fade-in"
       onSubmit={e => {
         e.preventDefault();
-        onSubmit(numQuestions, useCustomPrompt ? "" : topic, useCustomPrompt ? customPrompt : undefined);
+        onSubmit(
+          numQuestions,
+          useCustomPrompt ? customPrompt : topic,
+          useCustomPrompt ? customPrompt : undefined
+        );
       }}
     >
       <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-800 mb-6 text-center font-sans tracking-tight drop-shadow-lg">
@@ -56,7 +60,7 @@ export default function QuestionForm({ onSubmit }: Props) {
             onChange={e => setCustomPrompt(e.target.value)}
             className="p-3 border-2 border-blue-200 rounded-lg w-full text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm mt-2"
             rows={3}
-            placeholder="Write your own prompt for Gemini (disables topic input)"
+            placeholder="eg. Generate 5 multiple choice questions about the French Revolution."
           />
         </label>
       </div>

@@ -43,9 +43,6 @@ export default function LoginForm({ onToggleForm, onLogin }: LoginFormProps) {
     <div className="w-full max-w-md mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">{error}</div>
-        )}
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
             Username
