@@ -14,4 +14,5 @@ export interface QuizState {
   questions: QuestionState[];
   currentScore: number;
   isSubmitted: boolean;
+  topic: string;
 }

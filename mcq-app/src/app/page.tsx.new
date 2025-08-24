@@ -1,0 +1,54 @@
+"use client";
+
+import { useState } from 'react';
+import { useAuth } from '@/lib/contexts/AuthContext';
+import LoginForm from '@/components/auth/LoginForm';
+import RegisterForm from '@/components/auth/RegisterForm';
+
+export default function Home() {
+  const { login, register } = useAuth();
+  const [showRegister, setShowRegister] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async (username: string, password: string) => {
+    try {
+      await login(username, password);
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+    }
+  };
+
+  const handleRegister = async (username: string, email: string | undefined, password: string) => {
+    try {
+      await register(username, email, password);
+    } catch (err: any) {
+      setError(err.message || 'Registration failed');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl p-8">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+          {showRegister ? 'Create Account' : 'Welcome Back'}
+        </h2>
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+            {error}
+          </div>
+        )}
+        {showRegister ? (
+          <RegisterForm
+            onToggleForm={() => setShowRegister(false)}
+            onRegister={handleRegister}
+          />
+        ) : (
+          <LoginForm
+            onToggleForm={() => setShowRegister(true)}
+            onLogin={handleLogin}
+          />
+        )}
+      </div>
+    </div>
+  );
+}

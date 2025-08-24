@@ -8,11 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0",
     "next": "latest",
+    "next-auth": "^4.24.11",
     "react": "latest",
     "react-dom": "latest"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "24.1.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",

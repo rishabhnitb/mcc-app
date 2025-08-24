@@ -1,0 +1,86 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/contexts/AuthContext';
+import UserHeader from '@/components/auth/UserHeader';
+import QuestionForm from '@/app/QuestionForm';
+import { navigateToLogin } from '@/lib/utils/navigation';
+
+export default function QuizSetup() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // Use useEffect for client-side redirects
+  useEffect(() => {
+    if (!user) {
+      navigateToLogin();
+    }
+  }, [user]);
+
+  const handleFetchQuestions = async (numQuestions: number, topic: string, customPrompt?: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch('/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ numQuestions, topic, customPrompt }),
+      });
+      
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Failed to fetch questions');
+      }
+
+      const data = await res.json();
+      if (data.questions) {
+        // Save quiz attempt
+        await fetch('/api/quiz/attempts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            topic: topic || 'Custom Quiz',
+            totalQuestions: numQuestions
+          }),
+        });
+
+        // Store questions in localStorage for the quiz page
+        localStorage.setItem('currentQuiz', JSON.stringify({
+          questions: data.questions,
+          topic: topic || 'Custom Quiz'
+        }));
+
+        router.push('/quiz');
+      }
+    } catch (error: any) {
+      console.error('Error fetching questions:', error);
+      setError(error.message || 'Failed to fetch questions');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
+      <UserHeader />
+      <div className="container mx-auto px-4 py-8 pt-20">
+        {error && (
+          <div className="text-center text-red-600 font-bold mb-4 text-lg sm:text-xl">
+            {error}
+          </div>
+        )}
+        {loading ? (
+          <div className="text-center text-blue-700 font-bold mb-4 animate-pulse text-lg sm:text-xl">
+            Loading questions...
+          </div>
+        ) : (
+          <QuestionForm onSubmit={handleFetchQuestions} />
+        )}
+      </div>
+    </div>
+  );
+}
